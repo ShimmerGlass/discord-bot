@@ -12,6 +12,8 @@
     "cron-parser": "^1.0.1",
     "discord.js": "^3.9.0",
     "leagueapi": "^0.4.10",
-    "mongodb": "^2.0.48"
+    "mongodb": "^2.0.48",
+    "request": "^2.65.0",
+    "webshot": "^0.16.0"
   }
 }

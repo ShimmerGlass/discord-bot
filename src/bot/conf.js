@@ -1,5 +1,6 @@
-var conf = function(client) {
-	this.client = client;
+var conf = function(bot) {
+	this.client = bot.client;
+	this.bot = bot;
 	this.attrs = {};
 };
 
@@ -31,6 +32,11 @@ conf.prototype.forEachUserOf = function(server) {
 
 conf.prototype.withStore = function() {
 	this.set('withStore', true);
+	return this;
+};
+
+conf.prototype.describe = function(synopsis) {
+	this.bot.addCommandSynopsis(synopsis);
 	return this;
 };
 

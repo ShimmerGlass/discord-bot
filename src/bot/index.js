@@ -15,6 +15,7 @@ var BotMaker = function(conf) {
 	this.client = new Discord.Client();
 	this.reacthandlers = [];
 
+	this.commandsSynopses = [];
 
 	var that = this;
 
@@ -45,7 +46,7 @@ BotMaker.prototype.react = function(pattern) {
 		? pattern
 		: new RegExp(pattern);
 
-	var c = new Conf(this.client);
+	var c = new Conf(this);
 
 	this.reacthandlers.push({
 		pattern: pattern,
@@ -59,7 +60,7 @@ BotMaker.prototype.command = function(cmdName) {
 	var that = this;
 
 	var pattern = new RegExp('^!' + QuoteRegExp(cmdName) + '(\\s+(.+))?$');
-	var c = new Conf(this.client);
+	var c = new Conf(this);
 
 	this.react(pattern).do(function(args) {
 		var rawArgs = pattern.exec(args.message.content)[2];
@@ -79,9 +80,20 @@ BotMaker.prototype.command = function(cmdName) {
 
 BotMaker.prototype.every = function(cronExpr) {
 	var interval = cronParser.parseExpression(cronExpr);
-	var c = new Conf(this.client);
+	var c = new Conf(this);
 
 	this.runCronScheduledTask(interval, c);
+	return c;
+};
+
+BotMaker.prototype.now = function() {
+	var c = new Conf(this);
+	var that = this;
+
+	setTimeout(function() {
+		that.executeTask(c);
+	});
+
 	return c;
 };
 
@@ -162,6 +174,14 @@ BotMaker.prototype.executeTask = function(conf, args) {
 			nargs.user = member;
 			that._doExecuteTask(conf, nargs);
 		});
+};
+
+BotMaker.prototype.addCommandSynopsis = function(synopsis) {
+	this.commandsSynopses.push(synopsis);
+};
+
+BotMaker.prototype.getCommandsSynopses = function() {
+	return this.commandsSynopses;
 };
 
 module.exports = BotMaker;

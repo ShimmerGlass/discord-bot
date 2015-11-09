@@ -29,7 +29,7 @@ module.exports = function(args, done) {
 	var that = this;
 	var ud = args.userData;
 
-	if (!ud.games || !ud.games.lol && ud.games.lol.ign)
+	if (!ud.games || !ud.games.lol || !ud.games.lol.ign)
 		return;
 
 	getDivision(ud.games.lol.ign, function(divisionStr) {
