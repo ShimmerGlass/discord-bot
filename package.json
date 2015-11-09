@@ -14,6 +14,7 @@
     "leagueapi": "^0.4.10",
     "mongodb": "^2.0.48",
     "request": "^2.65.0",
+    "require-directory": "^2.1.1",
     "webshot": "^0.16.0"
   }
 }
