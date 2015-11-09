@@ -8,7 +8,12 @@ MongoStore.prototype.connect = function(callback) {
 	var that = this;
 	MongoClient.connect(this.mongoUrl, function(err, db) {
 		that.db = db;
-		callback(err, db);
+
+		if (err)
+			throw err;
+
+		if (callback)
+			callback(err, db);
 	});
 };
 
@@ -25,20 +30,36 @@ MongoStore.prototype.get = function(user, callback) {
 			return callback(err);
 
 		if (!data)
-			data = { id: user.id, username: user.username };
+			data = { id: user.id };
 
 		callback(data);
 	});
 };
 
-MongoStore.prototype.set = function(user, callback) {
+MongoStore.prototype.set = function(user, data, callback) {
 	var collection = this.db.collection('users');
 	collection.update(
 		{ id: user.id },
-		user,
+		data,
 		{ upsert: true },
 		callback
 	);
 };
 
-module.exports = MongoStore;
+MongoStore.prototype.getAndUpdate = function(user, callback) {
+	var that = this;
+
+	this.get(user, function(data) {
+		callback(data, function(newData) {
+			newData = newData || data;
+
+			that.set(user, newData);
+		});
+	});
+};
+
+module.exports = function(url) {
+	var s = new MongoStore(url);
+	s.connect();
+	return s;
+};

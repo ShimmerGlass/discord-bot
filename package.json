@@ -1,17 +1,22 @@
 {
   "name": "discord-bot",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/index.js",
+  "repository" : {
+    "type" : "git",
+    "url" : "https://github.com/Aestek/discord-bot.git"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Aestek",
   "license": "ISC",
   "dependencies": {
+    "async": "^1.5.0",
     "cron-parser": "^1.0.1",
     "discord.js": "^3.9.0",
-    "leagueapi": "^0.4.10",
-    "mongodb": "^2.0.48"
+    "mongodb": "^2.0.48",
+    "require-directory": "^2.1.1"
   }
 }

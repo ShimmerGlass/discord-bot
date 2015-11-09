@@ -1,30 +1,63 @@
-var Bot = require('./bot');
-var MongoStore = require('./bot/store/mongo');
-var config = require('../config/config.json');
+var Discord = require("discord.js");
 
-var bot = new Bot({
-	email: config.discordEmail,
-	password: config.discordPassword,
-	store: new MongoStore('mongodb://localhost:27017/discord')
-});
+var BotMaker = function(conf) {
+	this.email     = conf.email;
+	this.password  = conf.password;
 
-bot.connect(function() {
-	console.log('Connected.');
+	this.client = new Discord.Client();
 
-	bot
-		.command('setign')
-		.withStore()
-		.do(require('./tasks/setign'));
+	this.registeredTriggers = [];
+	this.registeredServices =
 
-	bot
-		.command('getign')
-		.withStore()
-		.do(require('./tasks/getign'));
+	this.services = require('./services');
+	this.tasks    = require('./tasks');
+	this.triggers = require('./triggers');
+	this.packages = require('./packages');
+};
 
-	bot
-		.every('* * * * *')
-		.forEachUserOf('112588514289258496')
-		.withStore()
-		.sink('112588514289258496')
-		.do(require('./tasks/loldivision'))
-});
+
+BotMaker.prototype.connect = function(cb) {
+	this.client.login(this.email, this.password, function(err) {
+		if (err)
+			throw new Error(err.message + ' : ' + err.response.text);
+	});
+
+	this.client.on('ready', cb);
+};
+
+BotMaker.prototype.hasService = function(name) {
+	return !!this.registeredServices[name];
+};
+
+BotMaker.prototype.addService = function(name, component) {
+	if (this.hasService(name))
+		throw new Error('A component already exists under this name.');
+
+	this.registeredServices[name] = component;
+};
+
+BotMaker.prototype.getService = function(name) {
+	return this.registeredServices[name];
+};
+
+BotMaker.prototype.use = function(h) {
+	return h(this);
+};
+
+BotMaker.prototype.on = function(trigger) {
+	var that = this;
+
+	if (!(trigger instanceof this.triggers.now))
+		trigger = new (Function.prototype.bind.apply(trigger, arguments));
+
+	this.registeredTriggers.push(trigger);
+
+	setTimeout(function() {
+		trigger.setup(that);
+		trigger.run(that);
+	});
+
+	return trigger;
+};
+
+module.exports = BotMaker;
