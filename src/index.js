@@ -11,32 +11,30 @@ bot.connect(function() {
 
 	bot.addComponent('store', bot.components['mongo-store']('mongodb://localhost/discord'));
 
+	// bot
+	// 	.on(bot.triggers.command, 'testaestek')
+	// 	.restrict({
+	// 		channelId: '112960513339633664'
+	// 	})
+	// 	.describe({
+	// 		usage: 'Test da booty',
+	// 		description: 'Lowl'
+	// 	})
+	// 	.do(function(bot, conf, params) {
+	// 		console.log('ok', params.commandArgs);
+	// 	});
+
 	bot
-		.on(bot.triggers.command, 'testaestek')
-		.describe({
-			usage: 'Test da booty',
-			description: 'Lowl'
-		})
+		.on(bot.triggers.base)
+		.forEachUser()
 		.do(function(bot, conf, params) {
-			console.log('ok', params.commandArgs);
-			bot.client.sendMessage('112960513339633664', 'Ho!');
+			console.log(this.forEachItem.username);
 		});
 
-	bot
-		.on(bot.triggers.command, 'teststore')
-		.withStore()
-		.do(function(bot, conf, params) {
-			this.store.data.test = this.store.data.test || 0;
-			this.store.data.test++;
-
-			this.reply(this.store.data.test);
-			this.store.done();
-		});
-
-	bot
-		.on(bot.triggers.cron, '12 15 * * *')
-		.sink('112588514289258496')
-		.do(require('./tasks/bonjour-madame'));
+	// bot
+	// 	.on(bot.triggers.cron, '12 15 * * *')
+	// 	.sink('112588514289258496')
+	// 	.do(require('./tasks/bonjour-madame'));
 
 	bot.use(bot.packages.help);
 });

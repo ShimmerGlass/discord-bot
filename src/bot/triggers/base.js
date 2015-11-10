@@ -35,7 +35,21 @@ Trigger.prototype.describe = function(synopsis) {
 };
 
 Trigger.prototype.forEach = function(items) {
-	this.set('forEachItems', items);
+	this.set('forEachItems', function() { return items });
+	return this;
+};
+
+Trigger.prototype.forEachUser = function() {
+	this.set('forEachItems', function(bot, args) {
+		return bot.client.users;
+	});
+	return this;
+};
+
+Trigger.prototype.forEachServer = function() {
+	this.set('forEachItems', function(bot, args) {
+		return bot.client.servers;
+	});
 	return this;
 };
 
@@ -55,7 +69,10 @@ Trigger.prototype.execute = function(bot, args) {
 
 	var repeatHelperPos = helpersA.length;
 
-	(this.get('forEachItems') || [null]).forEach(function(item) {
+	(
+		(this.get('forEachItems') && this.get('forEachItems')(bot, args)) ||
+		[null]
+	).forEach(function(item) {
 		helpersA[repeatHelperPos] = {
 			name: 'forEachItem',
 			factory: function(b, a, d) { return d(item); }
