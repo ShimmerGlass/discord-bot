@@ -2,7 +2,6 @@ var Base = require('./base');
 var util = require("util");
 
 var Command = function(command) {
-	console.log(command);
 	Base.call(this);
 	this.command = command;
 };
@@ -57,7 +56,7 @@ Command.prototype.run = function(bot) {
 
 		that.execute(bot, {
 			message: message,
-			commandArgs: rawArgs
+			commandArgs: cmdArgs
 		});
 	});
 };

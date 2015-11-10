@@ -7,11 +7,14 @@ var BotMaker = function(conf) {
 	this.client = new Discord.Client();
 
 	this.registeredTriggers = [];
+	this.registeredComponents =
 
-	this.components = require('./component');
+	this.components = require('./components');
+	this.tasks      = require('./tasks');
+	this.triggers   = require('./triggers');
+	this.packages   = require('./packages');
 };
 
-BotMaker.triggers = require('./trigger');
 
 BotMaker.prototype.connect = function(cb) {
 	this.client.login(this.email, this.password, function(err) {
@@ -22,15 +25,19 @@ BotMaker.prototype.connect = function(cb) {
 	this.client.on('ready', cb);
 };
 
+BotMaker.prototype.hasComponent = function(name) {
+	return !!this.registeredComponents[name];
+};
+
 BotMaker.prototype.addComponent = function(name, component) {
-	if (this.components[name])
+	if (this.hasComponent(name))
 		throw new Error('A component already exists under this name.');
 
-	this.components[name] = component;
+	this.registeredComponents[name] = component;
 };
 
 BotMaker.prototype.getComponent = function(name) {
-	return this.components[name];
+	return this.registeredComponents[name];
 };
 
 BotMaker.prototype.use = function(h) {
@@ -40,7 +47,7 @@ BotMaker.prototype.use = function(h) {
 BotMaker.prototype.on = function(trigger) {
 	var that = this;
 
-	if (!(trigger instanceof BotMaker.triggers.base))
+	if (!(trigger instanceof this.triggers.base))
 		trigger = new (Function.prototype.bind.apply(trigger, arguments));
 
 	this.registeredTriggers.push(trigger);

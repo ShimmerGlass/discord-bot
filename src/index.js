@@ -1,5 +1,4 @@
 var Bot = require('./bot');
-var triggers = Bot.triggers;
 var MongoStore = require('./bot/store/mongo');
 var config = require('../config/config.json');
 
@@ -12,19 +11,15 @@ bot.connect(function() {
 	console.log('Connected.');
 
 	bot
-		.on(triggers.command, 'testaestek')
+		.on(bot.triggers.command, 'testaestek')
 		.describe({
 			usage: 'Test da booty',
-			describtion: 'Lowl'
+			description: 'Lowl'
 		})
 		.do(function(bot, conf, params) {
 			console.log('ok', params.commandArgs);
 			bot.client.sendMessage('112960513339633664', 'Ho!');
 		});
 
-	bot
-		.on(triggers.base)
-		.do(function(bot) {
-			console.log(bot.getComponent('help'))
-		});
+	bot.use(bot.packages.help);
 });
