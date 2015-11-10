@@ -1,5 +1,6 @@
-var Base = require('./base');
-var util = require("util");
+var Base  = require('./react');
+var util  = require("util");
+var store = require('../helpers/store');
 
 var Command = function(command) {
 	Base.call(this);

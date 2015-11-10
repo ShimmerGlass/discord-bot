@@ -11,17 +11,17 @@ util.inherits(Cron, Base);
 
 Cron.prototype.run = function(bot) {
 	var that = this;
-	this.runCronScheduledTask();
+	this._schedule(bot);
 };
 
-Cron.prototype._schedule = function() {
+Cron.prototype._schedule = function(bot) {
 	var now = new Date().getTime();
-	var next = this.next().getTime();
+	var next = this.interval.next().getTime();
 
 	var that = this;
 	setTimeout(function() {
-		that.execute(conf);
-		that._schedule();
+		that.execute(bot);
+		that._schedule(bot);
 	}, next - now);
 }
 
