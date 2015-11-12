@@ -23,6 +23,14 @@ BotMaker.prototype.connect = function(cb) {
 	});
 
 	this.client.on('ready', cb);
+
+	var that = this;
+	this.client.on('ready', function() {
+		that.registeredTriggers.forEach(function(trigger) {
+			trigger.setup(that);
+			trigger.run(that);
+		});
+	});
 };
 
 BotMaker.prototype.hasService = function(name) {
@@ -51,11 +59,6 @@ BotMaker.prototype.on = function(trigger) {
 		trigger = new (Function.prototype.bind.apply(trigger, arguments));
 
 	this.registeredTriggers.push(trigger);
-
-	setTimeout(function() {
-		trigger.setup(that);
-		trigger.run(that);
-	});
 
 	return trigger;
 };
