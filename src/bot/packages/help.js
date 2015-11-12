@@ -1,6 +1,6 @@
 module.exports = function(bot) {
-	if (!bot.hasComponent('help'));
-		bot.addComponent(bot.components.help);
+	if (!bot.hasService('help'));
+		bot.addService(bot.services.help);
 
 	return bot
 		.on(bot.triggers.command, 'help')

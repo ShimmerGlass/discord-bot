@@ -1,4 +1,4 @@
-var Base = require('./base');
+var Base = require('./now');
 var util = require("util");
 var store = require('../helpers/store');
 
@@ -36,23 +36,25 @@ React.prototype.withStore = store(function(bot, args) {
 React.prototype.execute = function(bot, args) {
 	var re = this.get('restrictExpr');
 
-	if (
-		re.serverId
-		&& re.serverId.indexOf(args.message.channel.server.id) == -1
-	)
-		return;
+	if (re) {
+		if (
+			re.serverId
+			&& re.serverId.indexOf(args.message.channel.server.id) == -1
+		)
+			return;
 
-	if (
-		re.userId
-		&& re.userId.indexOf(args.message.author.id) == -1
-	)
-		return;
+		if (
+			re.userId
+			&& re.userId.indexOf(args.message.author.id) == -1
+		)
+			return;
 
-	if (
-		re.channelId
-		&& re.channelId.indexOf(args.message.channel.id) == -1
-	)
-		return;
+		if (
+			re.channelId
+			&& re.channelId.indexOf(args.message.channel.id) == -1
+		)
+			return;
+	}
 
 	Base.prototype.execute.call(this, bot, args);
 };

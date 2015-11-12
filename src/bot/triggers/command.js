@@ -41,6 +41,16 @@ Command.prototype._parseArgs = function(rawArgs) {
 	return args;
 };
 
+Command.prototype.describe = function(synopsis) {
+	this.set('synopsis', synopsis);
+	return this;
+};
+
+Command.prototype.setup = function(bot) {
+	if (this.get('synopsis'))
+		bot.getService('help').add(this.get('synopsis'));
+};
+
 Command.prototype.run = function(bot) {
 	var that = this;
 

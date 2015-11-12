@@ -6,7 +6,7 @@ function strPad(input, length, string) {
 module.exports = function(bot, conf, args) {
 	var msg = '**Here is the list of available commands:**\n```';
 
-	var l = bot.getComponent('help').get();
+	var l = bot.getService('help').get();
 
 	var maxTitleLength = 0;
 	l.forEach(function(c) {

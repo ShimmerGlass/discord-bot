@@ -1,4 +1,4 @@
-var Base = require('./base');
+var Base = require('./now');
 var util = require("util");
 var cronParser = require('cron-parser');
 

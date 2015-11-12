@@ -1,19 +1,19 @@
 var async = require('async');
 
-var Trigger = function() {
+var Now = function() {
 	this.attrs = {};
 	this.helpers = {};
 };
 
-Trigger.prototype.set = function(k, v) {
+Now.prototype.set = function(k, v) {
 	this.attrs[k] = v;
 };
 
-Trigger.prototype.get = function(k) {
+Now.prototype.get = function(k) {
 	return this.attrs[k];
 };
 
-Trigger.prototype.sink = function(sink) {
+Now.prototype.sink = function(sink) {
 	var that = this;
 	this.set('sink', sink);
 	this.addHelper('sink', function(bot, args, cb) {
@@ -24,43 +24,38 @@ Trigger.prototype.sink = function(sink) {
 	return this;
 };
 
-Trigger.prototype.do = function(handler) {
+Now.prototype.do = function(handler) {
 	this.set('handler', handler);
 	return this;
 };
 
-Trigger.prototype.describe = function(synopsis) {
-	this.set('synopsis', synopsis);
-	return this;
-};
-
-Trigger.prototype.forEach = function(items) {
+Now.prototype.forEach = function(items) {
 	this.set('forEachItems', function() { return items });
 	return this;
 };
 
-Trigger.prototype.forEachUser = function() {
+Now.prototype.forEachUser = function() {
 	this.set('forEachItems', function(bot, args) {
 		return bot.client.users;
 	});
 	return this;
 };
 
-Trigger.prototype.forEachServer = function() {
+Now.prototype.forEachServer = function() {
 	this.set('forEachItems', function(bot, args) {
 		return bot.client.servers;
 	});
 	return this;
 };
 
-Trigger.prototype.addHelper = function(name, helper) {
+Now.prototype.addHelper = function(name, helper) {
 	if (this.helpers[name])
 		throw new Error('An helper already exists under this name');
 
 	this.helpers[name] = helper;
 };
 
-Trigger.prototype.execute = function(bot, args) {
+Now.prototype.execute = function(bot, args) {
 	var that = this;
 	var helpersA = [];
 
@@ -97,13 +92,12 @@ Trigger.prototype.execute = function(bot, args) {
 	});
 };
 
-Trigger.prototype.setup = function(bot) {
-	if (this.get('synopsis'))
-		bot.getComponent('help').add(this.get('synopsis'));
+Now.prototype.setup = function(bot) {
+	// noop
 };
 
-Trigger.prototype.run = function(bot) {
+Now.prototype.run = function(bot) {
 	this.execute(bot, {});
 };
 
-module.exports = Trigger;
+module.exports = Now;

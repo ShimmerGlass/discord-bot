@@ -6,35 +6,28 @@ var bot = new Bot({
 	password: config.discordPassword
 });
 
+bot.addService('store', bot.services['mongo-store']('mongodb://localhost/discord'));
+
+bot
+	.on(bot.triggers.command, 'hello')
+	.restrict({
+		channelId: '112960513339633664'
+	})
+	.describe({
+		usage: '!hello',
+		description: 'Hello, world'
+	})
+	.do(function(bot, conf) {
+		this.reply('world');
+	});
+
+bot
+	.on(bot.triggers.cron, '52 21 * * *')
+	.sink('112960513339633664')
+	.do(require('./tasks/bonjour-madame'));
+
+bot.use(bot.packages.help);
+
 bot.connect(function() {
 	console.log('Connected.');
-
-	bot.addComponent('store', bot.components['mongo-store']('mongodb://localhost/discord'));
-
-	// bot
-	// 	.on(bot.triggers.command, 'testaestek')
-	// 	.restrict({
-	// 		channelId: '112960513339633664'
-	// 	})
-	// 	.describe({
-	// 		usage: 'Test da booty',
-	// 		description: 'Lowl'
-	// 	})
-	// 	.do(function(bot, conf, params) {
-	// 		console.log('ok', params.commandArgs);
-	// 	});
-
-	bot
-		.on(bot.triggers.base)
-		.forEachUser()
-		.do(function(bot, conf, params) {
-			console.log(this.forEachItem.username);
-		});
-
-	// bot
-	// 	.on(bot.triggers.cron, '12 15 * * *')
-	// 	.sink('112588514289258496')
-	// 	.do(require('./tasks/bonjour-madame'));
-
-	bot.use(bot.packages.help);
 });
