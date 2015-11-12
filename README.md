@@ -297,5 +297,5 @@ store.getAndUpdate(user, function(data, done) {
 MongoDb backed store.
 
 ```js
-bot.addComponent('store', bot.services['mongo-store']('mongodb://localhost/discord'));
+bot.addService('store', bot.services['mongo-store']('mongodb://localhost/discord'));
 ```
