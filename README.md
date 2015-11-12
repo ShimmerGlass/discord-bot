@@ -7,7 +7,7 @@
 Here is an hello world using **discord-bot** :
 
 ```js
-var Bot = require('discord-bot-maker');
+var Bot = require('discord-bot');
 
 var bot = new Bot({
 	email: <email>,
