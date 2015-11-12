@@ -26,8 +26,7 @@ Command.prototype._parseArgs = function(rawArgs) {
 				inquotes = false;
 			} else if (c == '"' && !escaped && !inquotes) {
 				inquotes = true;
-			} else {
-
+			} else if (c != ' ' || inquotes) {
 				if (!args[argi])
 					args[argi] = '';
 
