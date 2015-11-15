@@ -206,6 +206,24 @@ If no `[argumentNames]` is given, `args.commandArgs` will be an array.
 
 Set a description for this trigger, allowing for example the help package to read it and expose it as a `!help` command. Description can be either a string or `{usage: string, description: string}`
 
+### MentionCommand
+
+Extends Command.
+
+Is executed when someone mentions the bot along with a command keyword, ie `@bot print-help`.
+Users can talk to the bot via private message. If so the mention is not nescessary.
+
+```js
+bot
+	.on(bot.triggers['mention-command'], 'say', ['word'])
+	.do(function(bot, conf, args) {
+		this.reply(args.commandArgs.word);
+	});
+
+//-> @bot say hello
+//<- hello
+```
+
 ### Cron
 
 Extends Now.
