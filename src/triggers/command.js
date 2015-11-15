@@ -67,9 +67,27 @@ Command.prototype.describe = function(synopsis) {
 	return this;
 };
 
+Command.prototype._getSynopsis = function() {
+	var s = this.get('synopsis');
+
+	if (typeof s == 'string' || !s) {
+		var usage = '!' + this.command;
+		if (this.argsName)
+			usage += ' [' + this.argsName.join('] [') + ']';
+
+		return {
+			usage: usage,
+			description: s
+		};
+	} else {
+		return s;
+	}
+};
+
 Command.prototype.setup = function(bot) {
-	if (this.get('synopsis'))
-		bot.getService('help').add(this.get('synopsis'));
+	var s = this._getSynopsis();
+	if (s)
+		bot.getService('help').add(s);
 };
 
 Command.prototype.run = function(bot) {

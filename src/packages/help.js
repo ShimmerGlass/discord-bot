@@ -3,6 +3,7 @@ module.exports = function(bot) {
 		bot.addService(bot.services.help);
 
 	return bot
-		.on(bot.triggers.command, 'help')
+		.on(bot.triggers['mention-command'], 'help')
+		.describe('Print this message.')
 		.do(bot.tasks['print-help']);
 };
