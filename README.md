@@ -176,15 +176,15 @@ Extends React.
 
 Is executed when the specified command in entered. A command is a message that starts with a `!` then the command keyword. ie: `!hello`.
 
-`bot.on(bot.triggers.command, 'hello')`
+`bot.on(bot.triggers.command, 'hello', [argumentNames])`
 
 #### Argument parsing
 
 ```js
 bot
-	.on(bot.triggers.command, 'say')
+	.on(bot.triggers.command, 'say', ['word'])
 	.do(function(bot, conf, args) {
-		this.reply(args.commandArgs[0]);
+		this.reply(args.commandArgs.word);
 	});
 
 //-> !say hello
@@ -196,6 +196,9 @@ Arguments are separated by spaces and multi words arguments can be double-quoted
 * `argument`
 * `"i contain spaces"`
 * `"He said \"hello\""`
+
+If no `[argumentNames]` is given, `args.commandArgs` will be an array.
+`[argumentNames]` can contain mentions, ex ['word', '@user'].
 
 #### Methods
 

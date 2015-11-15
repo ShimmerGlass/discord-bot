@@ -2,9 +2,10 @@ var Base  = require('./react');
 var util  = require("util");
 var store = require('../helpers/store');
 
-var Command = function(command) {
+var Command = function(command, argsName) {
 	Base.call(this);
 	this.command = command;
+	this.argsName = argsName;
 };
 
 util.inherits(Command, Base);
@@ -40,6 +41,27 @@ Command.prototype._parseArgs = function(rawArgs) {
 	return args;
 };
 
+Command.prototype._mapArgs = function(args, mentions, map) {
+	var mentionIdx = 0;
+	var mappedArgs = {};
+	for (var i = 0; i < map.length; i++) {
+		var argName = map[i];
+		var isMention = argName.substr(0, 1) == '@';
+
+		if (isMention)
+			argName = argName.substr(1);
+
+		if (!isMention)
+			mappedArgs[argName] = args[i];
+		else {
+			mappedArgs[argName] = mentions[mentionIdx];
+			mentionIdx++;
+		}
+	}
+
+	return mappedArgs;
+};
+
 Command.prototype.describe = function(synopsis) {
 	this.set('synopsis', synopsis);
 	return this;
@@ -63,6 +85,9 @@ Command.prototype.run = function(bot) {
 		var cmdArgs = rawArgs
 			? that._parseArgs(rawArgs)
 			: [];
+
+		if (that.argsName)
+			cmdArgs = that._mapArgs(cmdArgs, message.mentions, that.argsName);
 
 		that.execute(bot, {
 			message: message,
