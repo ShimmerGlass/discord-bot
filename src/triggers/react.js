@@ -33,28 +33,35 @@ React.prototype.withStore = store(function(bot, args) {
 	return args.message.author;
 });
 
-React.prototype.execute = function(bot, args) {
+React.prototype.matchRestriction = function(message) {
 	var re = this.get('restrictExpr');
 
 	if (re) {
 		if (
 			re.serverId
-			&& re.serverId.indexOf(args.message.channel.server.id) == -1
+			&& re.serverId.indexOf(message.channel.server.id) == -1
 		)
-			return;
+			return false;
 
 		if (
 			re.userId
-			&& re.userId.indexOf(args.message.author.id) == -1
+			&& re.userId.indexOf(message.author.id) == -1
 		)
-			return;
+			return false;
 
 		if (
 			re.channelId
-			&& re.channelId.indexOf(args.message.channel.id) == -1
+			&& re.channelId.indexOf(message.channel.id) == -1
 		)
-			return;
+			return false;
 	}
+
+	return true;
+}
+
+React.prototype.execute = function(bot, args) {
+	if (!this.matchRestriction(args.message))
+		return;
 
 	Base.prototype.execute.call(this, bot, args);
 };

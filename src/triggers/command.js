@@ -91,7 +91,7 @@ Command.prototype.setup = function(bot) {
 	var helpService = bot.getService('help');
 
 	if (s && helpService)
-		helpService.add(s);
+		helpService.add(this, s);
 };
 
 Command.prototype.run = function(bot) {

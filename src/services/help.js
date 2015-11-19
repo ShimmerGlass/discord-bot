@@ -2,8 +2,11 @@ var help = function() {
 	this.synopses = [];
 };
 
-help.prototype.add = function(synopsis) {
-	this.synopses.push(synopsis);
+help.prototype.add = function(trigger, synopsis) {
+	this.synopses.push({
+		trigger: trigger,
+		synopsis: synopsis
+	});
 };
 
 help.prototype.get = function() {
