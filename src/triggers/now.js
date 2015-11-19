@@ -1,4 +1,5 @@
 var async = require('async');
+var _ = require('underscore');
 
 var Now = function() {
 	this.attrs = {};
@@ -13,14 +14,50 @@ Now.prototype.get = function(k) {
 	return this.attrs[k];
 };
 
-Now.prototype.sink = function(sink) {
+Now.prototype.sink = function(sinks) {
 	var that = this;
-	this.set('sink', sink);
+
+	if (!Array.isArray(sinks))
+		sinks = [sinks];
+
+	this.set('sink', sinks);
+
 	this.addHelper('sink', function(bot, args, cb) {
 		cb(function(message) {
-			bot.client.sendMessage(that.get('sink'), message)
+			sinks.forEach(function(sink) {
+				bot.client.sendMessage(sink, message);
+			});
 		});
 	});
+
+	return this;
+};
+
+Now.prototype.userSink = function(sinks) {
+	var that = this;
+
+	if (!Array.isArray(sinks))
+		sinks = [sinks];
+
+	this.set('userSink', sinks);
+
+	this.addHelper('userSink', function(bot, args, cb) {
+		cb(function(user, message) {
+			sinks.forEach(function(sink) {
+				bot.client.resolveDestination(sink).then(function(destination) {
+					var destination = bot.client.getChannel('id', destination);
+
+					if (!_.find(destination.server.members, function(s) {
+						return s.id == user.id;
+					}))
+						return;
+
+					bot.client.sendMessage(destination, message);
+				});
+			});
+		});
+	});
+
 	return this;
 };
 
