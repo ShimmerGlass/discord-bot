@@ -66,4 +66,9 @@ MentionCommand.prototype.run = function(bot) {
 	});
 };
 
+MentionCommand.prototype.toString = function() {
+	return '[mention-command ' + this.command + ':' + (this.get('name') || '') + ']';
+};
+
+
 module.exports = MentionCommand;

@@ -70,4 +70,9 @@ React.prototype.run = function(bot) {
 	});
 };
 
+React.prototype.toString = function() {
+	return '[react ' + this.pattern + ':' + (this.get('name') || '') + ']';
+};
+
+
 module.exports = React;

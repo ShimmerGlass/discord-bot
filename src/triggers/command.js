@@ -85,9 +85,13 @@ Command.prototype._getSynopsis = function() {
 };
 
 Command.prototype.setup = function(bot) {
+	Base.prototype.setup.call(this, bot);
+
 	var s = this._getSynopsis();
-	if (s)
-		bot.getService('help').add(s);
+	var helpService = bot.getService('help');
+
+	if (s && helpService)
+		helpService.add(s);
 };
 
 Command.prototype.run = function(bot) {
@@ -113,5 +117,10 @@ Command.prototype.run = function(bot) {
 		});
 	});
 };
+
+Command.prototype.toString = function() {
+	return '[command ' + this.command + ':' + (this.get('name') || '') + ']';
+};
+
 
 module.exports = Command;

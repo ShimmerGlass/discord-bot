@@ -4,6 +4,7 @@ var cronParser = require('cron-parser');
 
 var Cron = function(cronExpr) {
 	Base.call(this);
+	this.cronExpr = cronExpr;
 	this.interval = cronParser.parseExpression(cronExpr);
 };
 
@@ -23,6 +24,11 @@ Cron.prototype._schedule = function(bot) {
 		that.execute(bot);
 		that._schedule(bot);
 	}, next - now);
-}
+};
+
+Cron.prototype.toString = function() {
+	return '[cron ' + this.cronExpr + ':' + (this.get('name') || '') + ']';
+};
+
 
 module.exports = Cron;

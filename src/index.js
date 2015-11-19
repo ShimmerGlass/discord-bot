@@ -7,7 +7,7 @@ var BotMaker = function(conf) {
 	this.client = new Discord.Client();
 
 	this.registeredTriggers = [];
-	this.registeredServices =
+	this.registeredServices = {};
 
 	this.services = require('./services');
 	this.tasks    = require('./tasks');

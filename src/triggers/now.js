@@ -48,6 +48,11 @@ Now.prototype.forEachServer = function() {
 	return this;
 };
 
+Now.prototype.name = function(name) {
+	this.set('name', name);
+	return this;
+};
+
 Now.prototype.addHelper = function(name, helper) {
 	if (this.helpers[name])
 		throw new Error('An helper already exists under this name');
@@ -57,6 +62,12 @@ Now.prototype.addHelper = function(name, helper) {
 
 Now.prototype.execute = function(bot, args) {
 	var that = this;
+
+	var logger = bot.getService('logger');
+
+	if (logger)
+		logger.onExec(this);
+
 	var helpersA = [];
 
 	for (var i in this.helpers)
@@ -93,11 +104,18 @@ Now.prototype.execute = function(bot, args) {
 };
 
 Now.prototype.setup = function(bot) {
-	// noop
+	var logger = bot.getService('logger');
+
+	if (logger)
+		logger.onRegister(this);
 };
 
 Now.prototype.run = function(bot) {
 	this.execute(bot, {});
+};
+
+Now.prototype.toString = function() {
+	return '[now:' + (this.get('name') || '') + ']';
 };
 
 module.exports = Now;
