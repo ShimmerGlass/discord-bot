@@ -26,6 +26,7 @@ BotMaker.prototype.connect = function(cb) {
 
 	var that = this;
 	this.client.on('ready', function() {
+		that.client.setMaxListeners(100);
 		that.registeredTriggers.forEach(function(trigger) {
 			trigger.setup(that);
 			trigger.run(that);
