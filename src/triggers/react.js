@@ -79,7 +79,7 @@ React.prototype.run = function(bot) {
 		if (!message.content.match(that.pattern))
 			return;
 
-		that.execute(bot, message);
+		that.execute(bot, { message: message });
 	});
 };
 
