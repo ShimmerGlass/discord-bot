@@ -38,8 +38,11 @@ React.prototype.matchRestriction = function(message) {
 
 	if (re) {
 		if (
-			re.serverId
-			&& re.serverId.indexOf(message.channel.server.id) == -1
+			re.serverId &&
+			(
+				!message.channel.server ||
+				re.serverId.indexOf(message.channel.server.id) == -1
+			)
 		)
 			return false;
 
