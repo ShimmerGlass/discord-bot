@@ -73,6 +73,9 @@ React.prototype.run = function(bot) {
 	var that = this;
 
 	bot.client.on('message', function(message) {
+		if (message.author.id == bot.client.user.id)
+			return;
+
 		if (!message.content.match(that.pattern))
 			return;
 
