@@ -2,8 +2,41 @@ var async = require('async');
 var _ = require('underscore');
 
 var Now = function() {
+	var that = this;
+
 	this.attrs = {};
 	this.helpers = {};
+
+	this.addHelper('updatingMessage', function(bot, args, cb) {
+		cb(function(target, steps) {
+			var message;
+			var stepIndex = 0;
+
+			function runStep() {
+				var step = steps[stepIndex];
+				steps[stepIndex].call(that, function(msgTxt) {
+					var sendCb = function(err, newMessage) {
+						if (err)
+							return;
+
+						message = newMessage;
+
+						stepIndex++;
+
+						if (steps[stepIndex])
+							runStep();
+					};
+
+					if (!message)
+						bot.sendMessage(target, msgTxt, sendCb);
+					else
+						bot.updateMessage(message, msgTxt, sendCb)
+				}, message);
+			};
+
+			runStep();
+		});
+	});
 };
 
 Now.prototype.set = function(k, v) {

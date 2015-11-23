@@ -64,4 +64,29 @@ BotMaker.prototype.on = function(trigger) {
 	return trigger;
 };
 
+BotMaker.prototype.sendAndLog = function(method, target, message, callback) {
+	var logger = this.getService('logger');
+	var that = this;
+	this.client[method](target, message, function(err, message) {
+		if (err && logger)
+			logger.log('Error while sending message: ' + err);
+		else if (logger) {
+			that.client.resolveDestination(target).then(function(destination) {
+				logger.log('Sent message to #' + destination + ': ' + message.content);
+			});
+		}
+
+		if (callback)
+			callback(err, message);
+	});
+}
+
+BotMaker.prototype.sendMessage = function(target, message, callback) {
+	this.sendAndLog('sendMessage', target, message, callback);
+};
+
+BotMaker.prototype.updateMessage = function(target, message, callback) {
+	this.sendAndLog('updateMessage', target, message, callback);
+};
+
 module.exports = BotMaker;
