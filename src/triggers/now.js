@@ -23,9 +23,9 @@ Now.prototype.sink = function(sinks) {
 	this.set('sink', sinks);
 
 	this.addHelper('sink', function(bot, args, cb) {
-		cb(function(message) {
+		cb(function(message, callback) {
 			sinks.forEach(function(sink) {
-				bot.client.sendMessage(sink, message);
+				bot.client.sendMessage(sink, message, callback);
 			});
 		});
 	});
