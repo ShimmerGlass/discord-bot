@@ -89,4 +89,8 @@ BotMaker.prototype.updateMessage = function(target, message, callback) {
 	this.sendAndLog('updateMessage', target, message, callback);
 };
 
+BotMaker.prototype.reply = function(target, message, callback) {
+	this.sendAndLog('reply', target, message, callback);
+};
+
 module.exports = BotMaker;

@@ -8,7 +8,7 @@ var React = function(pattern) {
 
 	this.addHelper('reply', function(bot, args, cb) {
 		cb(function(message) {
-			bot.client.reply(args.message, message);
+			bot.reply(args.message, message);
 		});
 	});
 };
