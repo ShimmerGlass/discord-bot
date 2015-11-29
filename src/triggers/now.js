@@ -37,6 +37,12 @@ var Now = function() {
 			runStep();
 		});
 	});
+
+	this.addHelper('log', function(bot, args, cb) {
+		cb(function(msg) {
+			bot.getService('logger').log(msg);
+		});
+	});
 };
 
 Now.prototype.set = function(k, v) {
