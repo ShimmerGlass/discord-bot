@@ -4,7 +4,7 @@ var Logger = function(bot, channel) {
 };
 
 Logger.prototype.log = function(msg) {
-	this.bot.client.sendMessage(this.channel, '```\n[' + new Date() + '] ' + msg.replace(/`/g, '\'') + '\n```');
+	this.bot.client.sendMessage(this.channel, '```\n[' + new Date() + '] ' + msg.toString().replace(/`/g, '\'') + '\n```');
 };
 
 Logger.prototype.onExec = function(trigger) {
